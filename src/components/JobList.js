@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import JobCard from './JobCard';
 
+import { Grid } from "@mui/material";
+
+
 const JobList = ({ jobs }) => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -29,12 +32,26 @@ const JobList = ({ jobs }) => {
   };
 
   return (
-    <div className="job-list">
-      {jobs.map(job => (
-        <JobCard key={job.id} job={job} />
+    // <div className="job-list">
+    //   {jobs.map(job => (
+    //     <JobCard key={job.id} job={job} />
+    //   ))}
+    //   {isLoading && <p>Loading more jobs...</p>}
+    // </div>
+    <Grid container spacing={8}>
+      {jobs.map((job, index) => (
+        <Grid
+          item
+          key={`${job.jdUid}-${job.location}-${index}`}
+          xs={12}
+          sm={6}
+          md={4}
+        >
+          <JobCard job={job} />
+        </Grid>
       ))}
       {isLoading && <p>Loading more jobs...</p>}
-    </div>
+    </Grid>
   );
 };
 

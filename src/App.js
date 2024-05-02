@@ -4,7 +4,6 @@ import { fetchJobs } from './actions/jobActions';
 import FilterBar from './components/FilterBar';
 import JobList from './components/JobList';
 import './styles.css'; 
-import Navbar from './components/Navbar,js';
 
 function App() {
   const dispatch = useDispatch();
@@ -25,7 +24,7 @@ function App() {
       <div className="app-header">
         <h1>Candidate Application Platform</h1>
       </div>
-      <Navbar />
+      {/* <Navbar /> */}
       <FilterBar />
       <div className="job-list-container">
         {loading ? (
