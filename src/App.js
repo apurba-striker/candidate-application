@@ -1,45 +1,41 @@
-import React from 'react';
-import JobCard from './JobCard';
+import React, { useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchJobs } from './actions/jobActions';
+import FilterBar from './components/FilterBar';
+import JobList from './components/JobList';
+import './styles.css'; 
+import Navbar from './components/Navbar,js';
 
 function App() {
-  // Sample job data
-  const jobs = [
-    {
-      title: 'Software Engineer',
-      company: 'Example Company',
-      location: 'New York, NY',
-      description: 'We are looking for a skilled software engineer to join our team. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eu efficitur lorem.',
-      experience: '2-5 years',
-    },
-    // {
-    //   title: 'Data Scientist',
-    //   company: 'Data Analytics Inc.',
-    //   location: 'San Francisco, CA',
-    //   description: 'Data Analytics Inc. is seeking a talented Data Scientist to help drive our data-driven approach to decision-making. Ut aliquet, magna vitae eleifend tincidunt, mi eros sagittis est, et pulvinar elit nulla vel odio.',
-    //   experience: '3-7 years',
-    // },
-    // {
-    //   title: 'Data Scientist',
-    //   company: 'Data Analytics Inc.',
-    //   location: 'San Francisco, CA',
-    //   description: 'Data Analytics Inc. is seeking a talented Data Scientist to help drive our data-driven approach to decision-making. Ut aliquet, magna vitae eleifend tincidunt, mi eros sagittis est, et pulvinar elit nulla vel odio.',
-    //   experience: '3-7 years',
-    // },
-    // {
-    //   title: 'Data Scientist',
-    //   company: 'Data Analytics Inc.',
-    //   location: 'San Francisco, CA',
-    //   description: 'Data Analytics Inc. is seeking a talented Data Scientist to help drive our data-driven approach to decision-making. Ut aliquet, magna vitae eleifend tincidunt, mi eros sagittis est, et pulvinar elit nulla vel odio.',
-    //   experience: '3-7 years',
-    // },
-    // Add more job objects as needed
-  ];
+  const dispatch = useDispatch();
+  const { loading, jobs, error, page } = useSelector(state => state.jobs);
+
+  useEffect(() => {
+    dispatch(fetchJobs());
+  }, [dispatch]);
+
+  console.log('Jobs:', jobs); 
+
+  const loadMoreJobs = useCallback(() => {
+    dispatch(fetchJobs(page + 1)); 
+  }, [dispatch, page]);
 
   return (
-    <div className="App">
-      {jobs.map((job, index) => (
-        <JobCard key={index} job={job} />
-      ))}
+    <div>
+      <div className="app-header">
+        <h1>Candidate Application Platform</h1>
+      </div>
+      <Navbar />
+      <FilterBar />
+      <div className="job-list-container">
+        {loading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>Error: {error}</p>
+        ) : (
+          <JobList jobs={jobs} loadMore={loadMoreJobs} /> 
+        )}
+      </div>
     </div>
   );
 }
